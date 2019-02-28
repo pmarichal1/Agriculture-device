@@ -33,6 +33,7 @@ def loop():
         print("Humidity : %.2f, \t Temperature : %.2f \n"%(dht.humidity,dht.temperature))
         time.sleep(2)
         Blink.flash_led()
+        #print temp and humidity to LCD
         LCD.run_lcd(dht.temperature,dht.humidity)
         
 if __name__ == '__main__':
