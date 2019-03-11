@@ -12,7 +12,7 @@ import Blink
 import LCD
 
 DHTPin = 15     #define the pin of DHT11
-
+# main loop
 def loop():
     dht = DHT.DHT(DHTPin)   #create a DHT class object
     sumCnt = 0              #number of reading times
