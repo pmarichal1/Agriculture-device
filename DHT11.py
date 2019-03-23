@@ -10,6 +10,7 @@ import time
 import Freenove_DHT as DHT
 import Blink
 import LCD
+import pickle
 
 DHTPin = 15     #define the pin of DHT11
 # main loop
@@ -17,6 +18,8 @@ def loop():
     dht = DHT.DHT(DHTPin)   #create a DHT class object
     sumCnt = 0              #number of reading times
     Blink.setup_led()
+    temperature_list = []
+    humidity_list = []
     while(True):
         sumCnt += 1         #counting number of reading times
         chk = dht.readDHT11()     #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
@@ -34,7 +37,24 @@ def loop():
         time.sleep(2)
         Blink.flash_led()
         #print temp and humidity to LCD
-        LCD.run_lcd(dht.temperature,dht.humidity)
+        temperature = float("%.2f" % dht.temperature)
+
+        if temperature > 0 and dht.humidity > 0:
+            LCD.run_lcd(dht.temperature,dht.humidity)
+            print(len(temperature_list))
+            if len(temperature_list) > 40:
+                temperature_list.pop(0)
+                humidity_list.pop(0)
+            temperature_list.extend([temperature])
+            humidity_list.extend([dht.humidity])
+            with open('envfile.data', 'wb') as filehandle:  
+                # store the data as binary data stream
+                pickle.dump(temperature_list, filehandle)
+                pickle.dump(humidity_list, filehandle)
+
+        print(temperature_list)
+        print(humidity_list)
+
         
 if __name__ == '__main__':
     print ('Program is starting ... ')
