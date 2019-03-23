@@ -42,7 +42,7 @@ def loop():
         if temperature > 0 and dht.humidity > 0:
             LCD.run_lcd(dht.temperature,dht.humidity)
             print(len(temperature_list))
-            if len(temperature_list) > 40:
+            if len(temperature_list) > 100:
                 temperature_list.pop(0)
                 humidity_list.pop(0)
             temperature_list.extend([temperature])
