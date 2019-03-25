@@ -11,11 +11,13 @@ import Freenove_DHT as DHT
 import Blink
 import LCD
 import pickle
+import sonar
 
 DHTPin = 15     #define the pin of DHT11
 # main loop
 def loop():
     dht = DHT.DHT(DHTPin)   #create a DHT class object
+    sonar.sonar_setup()
     sumCnt = 0              #number of reading times
     Blink.setup_led()
     temperature_list = []
@@ -40,7 +42,7 @@ def loop():
         temperature = float("%.2f" % dht.temperature)
 
         if temperature > 0 and dht.humidity > 0:
-            LCD.run_lcd(dht.temperature,dht.humidity)
+            LCD.run_lcd("Temp ", dht.temperature,"Humidity ", dht.humidity)
             print(len(temperature_list))
             if len(temperature_list) > 100:
                 temperature_list.pop(0)
@@ -54,6 +56,9 @@ def loop():
 
         print(temperature_list)
         print(humidity_list)
+        distance = sonar.sonar()
+        time.sleep(2) 
+        #LCD.run_lcd("Sonar",distance, "Sonar ", distance)
 
         
 if __name__ == '__main__':

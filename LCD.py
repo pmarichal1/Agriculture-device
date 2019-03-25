@@ -20,15 +20,21 @@ def get_cpu_temp():     # get CPU temperature and store it into file "/sys/class
 def get_time_now():     # get system time
     return datetime.now().strftime('    %H:%M:%S')
     
-def run_lcd(temperature, humidity):
+def run_lcd(ttxt, temperature, htxt, humidity):
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
     #lcd.clear()
     lcd.setCursor(0,0)  # set cursor position
-    lcd.message( 'TEMP: ' + str(temperature) +'F\n' )# display CPU temperature
+    if ttxt == 'Temp ':
+        lcd.message( str(ttxt) + str(temperature) +'F\n' )# display CPU temperature
     #lcd.message( 'CPU: ' + get_cpu_temp()+'\n' )# display CPU temperature
-    lcd.message( 'Humidity: ' + str(humidity)+ "%")# display Humidity
-
+        lcd.message( str(htxt) + str(humidity)+ "%")# display Humidity
+    else:
+        lcd.message( str(ttxt) + '\n')# display CPU temperature
+    #lcd.message( 'CPU: ' + get_cpu_temp()+'\n' )# display CPU temperature
+        lcd.message( str(humidity )+ "in")# display Humidity
+        
+        
     lcd.message( get_time_now() )   # display the time
     sleep(1)
         
@@ -52,7 +58,7 @@ lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4,5,6,7], GPIO=mcp)
 if __name__ == '__main__':
     print ('Program is starting ... ')
     try:
-        run_lcd(5,4)
+        run_lcd(5,5,4,4)
     except KeyboardInterrupt:
         destroy()
 
