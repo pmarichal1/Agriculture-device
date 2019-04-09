@@ -7,25 +7,40 @@
 ########################################################################
 import RPi.GPIO as GPIO
 import time
+import os
 import Freenove_DHT as DHT
 import Blink
 import LCD
 import pickle
 import sonar
+from datetime import datetime
+
 
 DHTPin = 15     #define the pin of DHT11
+
+def get_time_now():     # get system time
+    return datetime.now().strftime('    %H:%M:%S')
+
+
 # main loop
 def loop():
     dht = DHT.DHT(DHTPin)   #create a DHT class object
     sonar.sonar_setup()
     sumCnt = 0              #number of reading times
     Blink.setup_led()
+    hi_temp = 0
+    low_temp = 150
+    hi_hum = 0
+    low_hum = 110
+    bad_reading=0
     temperature_list = []
     humidity_list = []
     while(True):
         sumCnt += 1         #counting number of reading times
         chk = dht.readDHT11()     #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
-        print ("The sumCnt is : %d, \t chk    : %d"%(sumCnt,chk))
+        print(" Length of list %d"%(len(temperature_list)))
+        #print(len(temperature_list))
+        print ("The Loop Count  is : %d, \t chk    : %d"%(sumCnt,chk))
         if (chk is dht.DHTLIB_OK):      #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
             print("DHT11,OK!")
         elif(chk is dht.DHTLIB_ERROR_CHECKSUM): #data check has errors
@@ -35,30 +50,50 @@ def loop():
         else:               #other errors
             print("Other error!")
         dht.temperature = dht.temperature *(9/5) +32    
-        print("Humidity : %.2f, \t Temperature : %.2f \n"%(dht.humidity,dht.temperature))
         time.sleep(2)
         Blink.flash_led()
         #print temp and humidity to LCD
         temperature = float("%.2f" % dht.temperature)
-
         if temperature > 0 and dht.humidity > 0:
-            LCD.run_lcd("Temp ", dht.temperature,"Humidity ", dht.humidity)
-            print(len(temperature_list))
+            LCD.run_lcd("Temp F ", dht.temperature,"Humidity % ", dht.humidity)
             if len(temperature_list) > 200:
                 temperature_list.pop(0)
                 humidity_list.pop(0)
             temperature_list.extend([temperature])
             humidity_list.extend([dht.humidity])
+            temp_average = sum(temperature_list) / len(temperature_list)
+            hum_average = sum(humidity_list) / len(humidity_list) 
+
+            #temp file to lock file reader for plotting
+            f = open("lock.txt", 'w')
             with open('envfile.data', 'wb') as filehandle:  
                 # store the data as binary data stream
                 pickle.dump(temperature_list, filehandle)
                 pickle.dump(humidity_list, filehandle)
+            f.close()
+            os.remove("lock.txt")
+            # need to compensate for bad numbers so can't increase or decrease more than 25% in one sample
+            if temperature > hi_temp and temperature < (temp_average*1.25):
+                hi_temp = temperature
+            if temperature < low_temp and temperature > (temp_average - (temp_average*1.25)):
+                low_temp = temperature
+            if dht.humidity > hi_hum and dht.humidity < (hum_average*1.25):
+                hi_hum = dht.humidity
+            if dht.humidity < low_hum and dht.humidity > (dht.humidity - (dht.humidity*1.25)):
+                low_hum = dht.humidity
+            print("Current Humidity :     %.2f, \t Current Temperature :     %.2f"%(dht.humidity, temperature))
+            print("Average Humidity :     %.2f, \t Average Temperature :     %.2f"%(hum_average, temp_average))
+            print("Hi Humidity :          %.2f, \t Hi Temperature :          %.2f"%(hi_hum, hi_temp))
+            print("Low Humidity :         %.2f, \t Low Temperature :         %.2f"%(low_hum, low_temp))
+        else:
+            bad_reading+=1
 
-        print(temperature_list)
-        print(humidity_list)
-        distance = sonar.sonar()
+        distance = float("%.2f" % sonar.sonar())
+        #print(temperature_list)
+        #print(humidity_list) 
+        print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
         time.sleep(2) 
-        #LCD.run_lcd("Sonar",distance, "Sonar ", distance)
+        LCD.run_lcd("Time",get_time_now(), "Sonar ", distance)
 
         
 if __name__ == '__main__':

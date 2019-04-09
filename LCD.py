@@ -20,22 +20,13 @@ def get_cpu_temp():     # get CPU temperature and store it into file "/sys/class
 def get_time_now():     # get system time
     return datetime.now().strftime('    %H:%M:%S')
     
-def run_lcd(ttxt, temperature, htxt, humidity):
+def run_lcd(txt1, val1, txt2, val2):
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
-    #lcd.clear()
+    lcd.clear()
     lcd.setCursor(0,0)  # set cursor position
-    if ttxt == 'Temp ':
-        lcd.message( str(ttxt) + str(temperature) +'F\n' )# display CPU temperature
-    #lcd.message( 'CPU: ' + get_cpu_temp()+'\n' )# display CPU temperature
-        lcd.message( str(htxt) + str(humidity)+ "%")# display Humidity
-    else:
-        lcd.message( str(ttxt) + '\n')# display CPU temperature
-    #lcd.message( 'CPU: ' + get_cpu_temp()+'\n' )# display CPU temperature
-        lcd.message( str(humidity )+ "in")# display Humidity
-        
-        
-    lcd.message( get_time_now() )   # display the time
+    lcd.message( str(txt1) + str(val1) + '\n')
+    lcd.message( str(txt2) + str(val2))      
     sleep(1)
         
 def destroy():
