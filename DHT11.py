@@ -15,7 +15,7 @@ import pickle
 import sonar
 from datetime import datetime
 
-
+# time function
 DHTPin = 15     #define the pin of DHT11
 
 def get_time_now():     # get system time
