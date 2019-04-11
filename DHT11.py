@@ -19,7 +19,8 @@ from datetime import datetime
 DHTPin = 15     #define the pin of DHT11
 
 def get_time_now():     # get system time
-    return datetime.now().strftime('    %H:%M:%S')
+    return datetime.now().strftime('%A %B %D   %H:%M:%S')
+
 
 
 # main loop
@@ -94,6 +95,7 @@ def loop():
         #print(temperature_list)
         #print(humidity_list) 
         print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
+        print(get_time_now())
         time.sleep(2) 
         LCD.run_lcd("Time",get_time_now(), "Sonar ", distance)
 
