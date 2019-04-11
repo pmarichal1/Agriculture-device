@@ -19,9 +19,10 @@ from datetime import datetime
 DHTPin = 15     #define the pin of DHT11
 
 def get_time_now():     # get system time
+    return datetime.now().strftime(' %H:%M:%S')
+
+def get_date_now():     # get system time
     return datetime.now().strftime('%A %B %D   %H:%M:%S')
-
-
 
 # main loop
 def loop():
@@ -38,7 +39,7 @@ def loop():
     humidity_list = []
     list_size = 1800
     while(True):
-        print(get_time_now())
+        print(get_date_now())
         sumCnt += 1         #counting number of reading times
         chk = dht.readDHT11()     #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
         print(" Length of list %d"%(len(temperature_list)))
@@ -56,8 +57,10 @@ def loop():
         Blink.flash_led()
         #print temp and humidity to LCD
         temperature = float("%.2f" % dht.temperature)
-        if temperature > 0 and dht.humidity > 0:
-            LCD.run_lcd("Temp F ", dht.temperature,"Humidity % ", dht.humidity)
+        #if temperature > 0 and dht.humidity > 0:
+        if chk == 0:
+            LCD.run_lcd("Temp F ", str(temperature),"Humidity % ", dht.humidity)
+            time.sleep(2)
             if len(temperature_list) > list_size:
                 temperature_list.pop(0)
                 humidity_list.pop(0)
@@ -96,7 +99,7 @@ def loop():
         #print(humidity_list) 
         print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
         LCD.run_lcd("Time",get_time_now(), "Sonar ", distance)
-        time.sleep(3)
+        time.sleep(2)
 
         
 if __name__ == '__main__':
