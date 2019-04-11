@@ -19,10 +19,10 @@ def setup_led():
 def flash_led():
 
 	GPIO.output(ledPin, GPIO.HIGH)  # led on
-	print ('...led on')
+	#print ('...led on')
 	time.sleep(1)	
 	GPIO.output(ledPin, GPIO.LOW) # led off
-	print ('led off...')
+	#print ('led off...')
 	time.sleep(1)
 
 def destroy_led():

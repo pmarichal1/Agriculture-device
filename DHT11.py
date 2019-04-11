@@ -38,6 +38,7 @@ def loop():
     humidity_list = []
     list_size = 1800
     while(True):
+        print(get_time_now())
         sumCnt += 1         #counting number of reading times
         chk = dht.readDHT11()     #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
         print(" Length of list %d"%(len(temperature_list)))
@@ -94,7 +95,6 @@ def loop():
         #print(temperature_list)
         #print(humidity_list) 
         print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
-        print(get_time_now())
         LCD.run_lcd("Time",get_time_now(), "Sonar ", distance)
         time.sleep(3)
 
