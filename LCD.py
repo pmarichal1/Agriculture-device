@@ -19,7 +19,7 @@ def get_cpu_temp():     # get CPU temperature and store it into file "/sys/class
  
 def get_time_now():     # get system time
     return datetime.now().strftime('    %H:%M:%S')
-    
+  
 def run_lcd(txt1, val1, txt2, val2):
     mcp.output(3,1)     # turn on LCD backlight
     lcd.begin(16,2)     # set number of LCD lines and columns
