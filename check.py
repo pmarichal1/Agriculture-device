@@ -18,8 +18,8 @@ while(1):
             # read the data as binary data stream
             temp_list = pickle.load(filehandle)
             hum_list = pickle.load(filehandle)
-        print(temp_list[:15])
-        print(hum_list[:15])
+        print(temp_list[-15:])
+        print(hum_list[-15:])
         temp_elements = np.array(temp_list)
         temp_mean = np.mean(temp_elements, axis=0)
         temp_sd = np.std(temp_elements, axis=0)
