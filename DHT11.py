@@ -35,6 +35,7 @@ def loop():
     bad_reading=0
     temperature_list = []
     humidity_list = []
+    list_size = 1800
     while(True):
         sumCnt += 1         #counting number of reading times
         chk = dht.readDHT11()     #read DHT11 and get a return value. Then determine whether data read is normal according to the return value.
@@ -56,7 +57,7 @@ def loop():
         temperature = float("%.2f" % dht.temperature)
         if temperature > 0 and dht.humidity > 0:
             LCD.run_lcd("Temp F ", dht.temperature,"Humidity % ", dht.humidity)
-            if len(temperature_list) > 200:
+            if len(temperature_list) > list_size:
                 temperature_list.pop(0)
                 humidity_list.pop(0)
             temperature_list.extend([temperature])
@@ -79,7 +80,7 @@ def loop():
                 low_temp = temperature
             if dht.humidity > hi_hum and dht.humidity < (hum_average*1.15):
                 hi_hum = dht.humidity
-            if dht.humidity < low_hum and dht.humidity > (dht.humidity - (dht.humidity*1.15)):
+            if dht.humidity < low_hum and dht.humidity > (hum_average- (hum_average*1.15)):
                 low_hum = dht.humidity
             print("Current Humidity :     %.2f, \t Current Temperature :     %.2f"%(dht.humidity, temperature))
             print("Average Humidity :     %.2f, \t Average Temperature :     %.2f"%(hum_average, temp_average))
