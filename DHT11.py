@@ -37,7 +37,7 @@ def loop():
     bad_reading=0
     temperature_list = []
     humidity_list = []
-    list_size = 1800
+    list_size = 450
     while(True):
         print(get_date_now())
         sumCnt += 1         #counting number of reading times
@@ -54,13 +54,12 @@ def loop():
         else:               #other errors
             print("Other error!")
         dht.temperature = dht.temperature *(9/5) +32    
-        Blink.flash_led()
         #print temp and humidity to LCD
         temperature = float("%.2f" % dht.temperature)
         #if temperature > 0 and dht.humidity > 0:
         if chk == 0:
             LCD.run_lcd("Temp F ", str(temperature),"Humidity % ", dht.humidity)
-            time.sleep(2)
+            Blink.flash_led()
             if len(temperature_list) > list_size:
                 temperature_list.pop(0)
                 humidity_list.pop(0)
