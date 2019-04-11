@@ -89,6 +89,7 @@ def loop():
         else:
             bad_reading+=1
 
+
         distance = float("%.2f" %(sonar.sonar()))
         #print(temperature_list)
         #print(humidity_list) 
