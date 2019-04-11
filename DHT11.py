@@ -52,7 +52,6 @@ def loop():
         else:               #other errors
             print("Other error!")
         dht.temperature = dht.temperature *(9/5) +32    
-        time.sleep(2)
         Blink.flash_led()
         #print temp and humidity to LCD
         temperature = float("%.2f" % dht.temperature)
@@ -77,11 +76,11 @@ def loop():
             # need to compensate for bad numbers so can't increase or decrease more than 15% in one sample
             if temperature > hi_temp and temperature < (temp_average*1.15):
                 hi_temp = temperature
-            if temperature < low_temp and temperature > (temp_average - (temp_average*1.15)):
+            if temperature < low_temp and temperature > (temp_average - (temp_average*.15)):
                 low_temp = temperature
             if dht.humidity > hi_hum and dht.humidity < (hum_average*1.15):
                 hi_hum = dht.humidity
-            if dht.humidity < low_hum and dht.humidity > (hum_average- (hum_average*1.15)):
+            if dht.humidity < low_hum and dht.humidity > (hum_average - (hum_average*.15)):
                 low_hum = dht.humidity
             print("Current Humidity :     %.2f, \t Current Temperature :     %.2f"%(dht.humidity, temperature))
             print("Average Humidity :     %.2f, \t Average Temperature :     %.2f"%(hum_average, temp_average))
@@ -96,8 +95,8 @@ def loop():
         #print(humidity_list) 
         print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
         print(get_time_now())
-        time.sleep(2) 
         LCD.run_lcd("Time",get_time_now(), "Sonar ", distance)
+        time.sleep(3)
 
         
 if __name__ == '__main__':

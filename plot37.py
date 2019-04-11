@@ -47,14 +47,14 @@ while(1):
         print(f"Max Temperature = {max(temp_list)}  Min Temperature = {min(temp_list)}")
         print(f"Last Temperature = {temp_list[-1]}  Last Humidity = {hum_list[-1]}")
         
-        plt.xlabel("Time (2s)")
+        plt.xlabel("Time (5s)")
         plt.ylabel("Humidity % and Temp (F)")
         plt.plot(yarr, hum_final_list, yarr1, temp_final_list)
         plt.draw()
         print(f"---Plot graph finish---    Lock hit = {lock_hit}")
         plt.ion()
         plt.show()
-        time.sleep(2)
+        time.sleep(5)
         plt.pause(0.0001)
         plt.clf()
 

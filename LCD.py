@@ -27,7 +27,6 @@ def run_lcd(txt1, val1, txt2, val2):
     lcd.setCursor(0,0)  # set cursor position
     lcd.message( str(txt1) + str(val1) + '\n')
     lcd.message( str(txt2) + str(val2))      
-    sleep(1)
         
 def destroy():
     lcd.clear()
