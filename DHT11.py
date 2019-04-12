@@ -37,7 +37,7 @@ def loop():
     bad_reading=0
     temperature_list = []
     humidity_list = []
-    list_size = 450
+    list_size = 200
     while(True):
         print(get_date_now())
         sumCnt += 1         #counting number of reading times
