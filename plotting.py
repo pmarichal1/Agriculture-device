@@ -34,8 +34,8 @@ def get_data(label_dict):
                 # read the data as binary data stream
                 temp_list = pickle.load(filehandle)
                 hum_list = pickle.load(filehandle)
-            print(f"TEMP {temp_list[-15:]}")
-            print(f"Humidity {hum_list[-15:]}")
+            print(f"TEMP {temp_list[-10:]}")
+            print(f"Humidity {hum_list[-10:]}")
             temp_elements = np.array(temp_list)
             temp_mean = np.mean(temp_elements, axis=0)
             temp_sd = np.std(temp_elements, axis=0)
@@ -61,15 +61,15 @@ def get_data(label_dict):
     get_data_loop()
             
 root = Tk()
-root.title("Counting Seconds")
+root.title("Environmental Statistics")
 label_dict = {}
 canvas = Canvas(root, height=800, width=800, bg='#cccccc')
 canvas.pack()
 frame1 = Frame(root, highlightbackground="black", highlightthickness=4, bd=2)
 frame1.place(relx=0.5, rely=0.02, relwidth=0.95, relheight=0.47, anchor='n')
 
-env_stats = Label(frame1, font=("Calibri", 14), bd=3,  text="Environmental Statistics")
-env_stats.place(relx=0.5, rely=0.02, relwidth=0.3, relheight=0.05, anchor='n')
+#env_stats = Label(frame1, font=("Calibri", 14), bd=3,  text="Environmental Statistics")
+#env_stats.place(relx=0.5, rely=0.02, relwidth=0.3, relheight=0.05, anchor='n')
 
 hum_max_txt = Label(frame1, font=("Calibri", 12), bd=3,  text="Humidity max")
 hum_max_txt.place(relx=0.1, rely=0.1, relwidth=0.15, relheight=0.06, anchor='n')
