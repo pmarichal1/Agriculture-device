@@ -19,13 +19,17 @@ class Std_redirector(object):
         pass
    
  
+lock_hit = 0
+loop = 0
 def get_data(label_dict):
-    lock_hit=0
     def get_data_loop():
+        global lock_hit
+        global loop
         if os.path.isfile('lock.txt'):
             time.sleep(1)
-            lock_hit+=1
+            lock_hit += 1
         else:
+            loop += 1
             with open('envfile.data', 'rb') as filehandle:  
                 # read the data as binary data stream
                 temp_list = pickle.load(filehandle)
@@ -40,9 +44,9 @@ def get_data(label_dict):
             hum_mean = np.mean(hum_elements, axis=0)
             hum_sd = np.std(hum_elements, axis=0)
     
-            print("*****Len Humidity = {:<03.2f},  Len Temp = {:<3.2f}".format(len(hum_list),len(temp_list)))
+            #print("*****Len Humidity = {:<03.2f},  Len Temp = {:<3.2f}".format(len(hum_list),len(temp_list)))
             print("*****MinH = {:<03.2f},  MinT  = {:<3.2f}".format(min(hum_list), min(temp_list)))
-            print('\n')
+            print(f"Loop = {loop}  Lock hit = {lock_hit}\n")
             label_dict['hum_max_val'].config(text=str(f"{max(hum_list):3.2f}"))
             label_dict['hum_mean_val'].config(text=str(f"{hum_mean:3.2f}"))
             label_dict['hum_sd_val'].config(text=str(f"{hum_sd:3.2f}"))
