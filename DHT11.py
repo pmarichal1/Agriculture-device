@@ -38,6 +38,7 @@ def loop():
     temperature_list = []
     humidity_list = []
     list_size = 200
+    distance=0
     while(True):
         print(get_date_now())
         sumCnt += 1         #counting number of reading times
@@ -70,10 +71,12 @@ def loop():
 
             #temp file to lock file reader for plotting
             f = open("lock.txt", 'w')
+            distance = float("%.2f" %(sonar.sonar()))
             with open('envfile.data', 'wb') as filehandle:  
                 # store the data as binary data stream
                 pickle.dump(temperature_list, filehandle)
                 pickle.dump(humidity_list, filehandle)
+                pickle.dump(distance, filehandle)
             f.close()
             os.remove("lock.txt")
             # need to compensate for bad numbers so can't increase or decrease more than 15% in one sample
@@ -93,7 +96,6 @@ def loop():
             bad_reading+=1
 
 
-        distance = float("%.2f" %(sonar.sonar()))
         #print(temperature_list)
         #print(humidity_list) 
         print("Bad reads = %d %%\n"%((bad_reading/sumCnt)*100))
